@@ -1,3 +1,5 @@
+//  Adventure-Game
+//  A text-based adventure game based on the Lord of the Rings universe.
 //  Created by Stephen Anderson on 2/6/13.
 
 #include <iostream>
