@@ -1,3 +1,5 @@
+//  Created by Stephen Anderson on 2/6/13.
+
 #include <iostream>
 #include <string>
 #include <random>
