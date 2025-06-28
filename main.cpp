@@ -13,6 +13,7 @@ void playFrodo();
 void playGollum();
 void playAragorn();
 void playLegolas();
+void playSamwise();
 bool playAgain();
 void getValidChoice(int& choice, int min, int max);
 void displayAsciiArt(const std::string& art);
@@ -154,7 +155,7 @@ const std::string LEGOLAS_ASCII = R"(
              |   |'-.| L.'h  |  : |
              |;  \     |  J ; : : |
              | :  (    \  'L| : : |
-             | ;   \'.--|    \  : |
+             | ;   '.--|    \  : |
              | | : \    \-, /`\ : |
              L-'-;__\   \\ '  | | |
                      ;   \\   |'L_j
@@ -162,6 +163,20 @@ const std::string LEGOLAS_ASCII = R"(
               snd   <___/ /-  \
                          /    /
                          '---'
+)";
+
+const std::string SAMWISE_ASCII = R"(
+      _.-/|\-._
+     /  / | \  \
+    |  |  |  |  |
+    \  \ / \ /  /
+     `-/|\-`
+      / | \
+     /  .  \
+    /  / \  \
+   |  |   |  |
+   \  \   /  /
+    `-' `-'`
 )";
 
 // ASCII art of the entrance of Moria
@@ -229,10 +244,11 @@ int main() {
         std::cout << "3. Gollum" << std::endl;
         std::cout << "4. Aragorn" << std::endl;
         std::cout << "5. Legolas" << std::endl;
+        std::cout << "6. Samwise" << std::endl;
         std::cout << "Enter the number corresponding to your choice:" << std::endl;
 
         std::cin >> choice;
-        getValidChoice(choice, 1, 5);
+        getValidChoice(choice, 1, 6);
 
         switch (choice) {
             case 1:
@@ -249,6 +265,9 @@ int main() {
                 break;
             case 5:
                 playLegolas();
+                break;
+            case 6:
+                playSamwise();
                 break;
         }
 
@@ -306,13 +325,40 @@ void playGandalf() {
             std::cout << "Game Over" << std::endl;
         } else if (choice == 2) {
             std::cout << "You have chosen to openly oppose Sauron and his quest for the ring. Saruman is enraged by your decision and demands a duel...wizard style. Saruman resorts to dark magic and manages to beat you. The next thing you know, you wake up on top of the tower and your staff is nowhere to be found." << std::endl;
-            std::cout << "You can either call a moth and tell it to send a message to the eagles in hopes that they will rescue you. The other option is that you can jump off the tower out of sheer boredom. Who knows, maybe you'll make it." << std::endl;
-            std::cout << "Press 1 to call a moth or Press 2 to end this struggle and jump towards your death." << std::endl;
+            std::cout << "You are trapped on top of Orthanc. You can try to escape using your magic, or call for help, or even attempt a desperate jump.\n" << std::endl;
+            std::cout << "Press 1 to attempt a magical escape, 2 to call a moth for help, or 3 to jump off the tower." << std::endl;
 
             std::cin >> choice;
-            getValidChoice(choice, 1, 2);
+            getValidChoice(choice, 1, 3);
 
             if (choice == 1) {
+                std::cout << "You focus your remaining strength, attempting to conjure a spell to escape.\n" << std::endl;
+                int escapeOutcome = getRandomNumber(1, 2); // 1: success, 2: fail
+                if (escapeOutcome == 1) {
+                    std::cout << "With a burst of light, you manage to teleport away from Orthanc, landing safely far from Saruman's reach.\nGame Over" << std::endl;
+                } else {
+                    std::cout << "Your magic fails you, and you remain trapped. Saruman's power is too great.\n" << std::endl;
+                    std::cout << "You are forced to choose again: call a moth (1) or jump (2)?" << std::endl;
+                    std::cin >> choice;
+                    getValidChoice(choice, 1, 2);
+                    if (choice == 1) {
+                        std::cout << "You have chosen to call upon a moth to save your life. However, you do not know for sure if the moth will do as you say or is in fact a spy for the enemy. The moth might fetch a giant eagle to save your life or it might fetch a ringwraith, the most terrible of the enemy's servants." << std::endl;
+                        std::cout << "Press Enter to continue." << std::endl;
+                        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                        std::cin.get();
+
+                        int outcome = getRandomNumber(1, 2); // 1: eagle comes, 2: ringwraith comes
+                        if (outcome == 1) {
+                            std::cout << "Hooray! The moth cooperated and told the giant eagles you were in peril. They have come to save you!\nGame Over" << std::endl;
+                        } else {
+                            std::cout << "You encountered a corrupt moth, and the flying wraiths have come to kill you.\nGame Over" << std::endl;
+                        }
+                    }
+                    else if (choice == 2) {
+                        std::cout << "You have chosen to jump into the unknown depths that lie beneath. This decision results in you dying immediately on impact.\nGame Over" << std::endl;
+                    }
+                }
+            } else if (choice == 2) {
                 std::cout << "You have chosen to call upon a moth to save your life. However, you do not know for sure if the moth will do as you say or is in fact a spy for the enemy. The moth might fetch a giant eagle to save your life or it might fetch a ringwraith, the most terrible of the enemy's servants." << std::endl;
                 std::cout << "Press Enter to continue." << std::endl;
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -320,12 +366,11 @@ void playGandalf() {
 
                 int outcome = getRandomNumber(1, 2); // 1: eagle comes, 2: ringwraith comes
                 if (outcome == 1) {
-                    std::cout << "Hooray! The moth cooperated and told the giant eagles you were in peril. They have come to save you!" << std::endl;
-                    std::cout << "Game Over" << std::endl;
+                    std::cout << "Hooray! The moth cooperated and told the giant eagles you were in peril. They have come to save you!\nGame Over" << std::endl;
                 } else {
                     std::cout << "You encountered a corrupt moth, and the flying wraiths have come to kill you.\nGame Over" << std::endl;
                 }
-            } else if (choice == 2) {
+            } else if (choice == 3) {
                 std::cout << "You have chosen to jump into the unknown depths that lie beneath. This decision results in you dying immediately on impact.\nGame Over" << std::endl;
             }
         }
@@ -344,12 +389,24 @@ void playGandalf() {
         }
 
         if (choice == 2 || choice == 1) {
-            std::cout << "You have chosen to go through the Mines of Moria. Despite warnings, you lead the company into the darkness.\n" << std::endl;
+            std::cout << "You have chosen to go through the Mines of Moria. Despite warnings, you lead the company into the darkness." << std::endl;
 
             // Display the ASCII art of the entrance of Moria
             displayAsciiArt(MORIA_ENTRANCE_ASCII);
 
-            std::cout << "As you journey through Moria, you encounter the Balrog, a powerful fire demon.\n" << std::endl;
+            std::cout << "As you journey through Moria, you come to a fork in the path. One way leads deeper into the known tunnels, the other to a less-traveled, ancient passage.\n" << std::endl;
+            std::cout << "Do you take the main path or explore the ancient passage?" << std::endl;
+            std::cout << "Press 1 for the main path or 2 for the ancient passage." << std::endl;
+
+            std::cin >> choice;
+            getValidChoice(choice, 1, 2);
+
+            if (choice == 1) {
+                std::cout << "You continue along the main path, and soon you encounter the Balrog, a powerful fire demon.\n" << std::endl;
+            } else if (choice == 2) {
+                std::cout << "You venture into the ancient passage. After some time, you discover a hidden chamber filled with ancient dwarven treasures and lore. However, your presence awakens something ancient and terrible... the Balrog!\n" << std::endl;
+            }
+
             std::cout << "Do you face the Balrog to protect the Fellowship or attempt to flee?" << std::endl;
             std::cout << "Press 1 to face the Balrog or 2 to flee." << std::endl;
 
@@ -361,7 +418,18 @@ void playGandalf() {
                 std::cout << "With a mighty shout, you declare: 'You shall not pass!'\n" << std::endl;
                 std::cout << "You manage to defeat the Balrog but are pulled down into the abyss.\n" << std::endl;
                 std::cout << "After a long battle, you emerge victorious and are reborn as Gandalf the White.\n" << std::endl;
-                std::cout << "Game Over" << std::endl;
+                std::cout << "Now, reborn and more powerful, you must decide your next course of action.\n" << std::endl;
+                std::cout << "Do you seek counsel in the golden woods of Lothlórien or journey to Fangorn Forest to rouse the Ents?" << std::endl;
+                std::cout << "Press 1 to go to Lothlórien or 2 to go to Fangorn Forest." << std::endl;
+
+                std::cin >> choice;
+                getValidChoice(choice, 1, 2);
+
+                if (choice == 1) {
+                    std::cout << "You travel to Lothlórien, where you are welcomed by Lady Galadriel and Lord Celeborn.\nTheir wisdom and the beauty of the golden wood restore your spirit and clarify your purpose.\nGame Over" << std::endl;
+                } else if (choice == 2) {
+                    std::cout << "You journey to Fangorn Forest and awaken Treebeard and the other Ents.\nWith their aid, you march on Isengard, bringing ruin to Saruman's fortress.\nGame Over" << std::endl;
+                }
             } else if (choice == 2) {
                 std::cout << "You attempt to flee, but the Balrog catches up to the Fellowship.\n" << std::endl;
                 std::cout << "Without your sacrifice, the entire Fellowship is destroyed.\n" << std::endl;
@@ -393,8 +461,90 @@ void playFrodo() {
 
     if (choice == 1) {
         std::cout << "You have accepted the quest to destroy the ring in the fiery depths of Mount Doom." << std::endl;
-        // Continue with Frodo's expanded storyline...
-        // For brevity, we can assume the rest of the function remains as previously provided.
+        std::cout << "Now, you must begin your perilous journey. Do you head directly towards Rivendell, or do you make a stop at Bree and the Prancing Pony Inn?" << std::endl;
+        std::cout << "Press 1 to go directly to Rivendell or 2 to stop at Bree." << std::endl;
+
+        std::cin >> choice;
+        getValidChoice(choice, 1, 2);
+
+        if (choice == 1) {
+            std::cout << "You decide to avoid unnecessary delays and head straight for Rivendell.\n" << std::endl;
+            // Continue to Rivendell section
+        } else if (choice == 2) {
+            std::cout << "You arrive at Bree and settle into the Prancing Pony Inn. Here, you encounter a mysterious ranger known as Strider.\n" << std::endl;
+            std::cout << "Do you trust Strider and accept his offer of guidance, or do you try to avoid him?" << std::endl;
+            std::cout << "Press 1 to trust Strider or 2 to avoid him." << std::endl;
+
+            std::cin >> choice;
+            getValidChoice(choice, 1, 2);
+
+            if (choice == 1) {
+                std::cout << "You accept Strider's help, and he becomes your guide to Rivendell.\n" << std::endl;
+                std::cout << "On your journey, you reach Weathertop. Suddenly, you are ambushed by the Nazgûl!\n" << std::endl;
+                std::cout << "Do you put on the One Ring to escape, or do you try to fight them off with Strider's help?" << std::endl;
+                std::cout << "Press 1 to put on the Ring or 2 to fight." << std::endl;
+
+                std::cin >> choice;
+                getValidChoice(choice, 1, 2);
+
+                if (choice == 1) {
+                    std::cout << "You put on the One Ring, becoming invisible to the Nazgûl, but you are struck by the Morgul-blade.\nStrider drives them off, but you are gravely wounded.\nGame Over" << std::endl;
+                } else if (choice == 2) {
+                    std::cout << "You and Strider bravely fight off the Nazgûl, but you are still wounded, though less severely.\nGame Over" << std::endl;
+                }
+            } else if (choice == 2) {
+                std::cout << "You try to avoid Strider, but the Nazgûl find you alone in Bree and capture you.\nGame Over" << std::endl;
+            }
+        }
+        std::cout << "You eventually reach Rivendell, where you begin to recover and the Council of Elrond is held.\n" << std::endl;
+        std::cout << "Do you seek counsel from Lord Elrond or from Bilbo Baggins?" << std::endl;
+        std::cout << "Press 1 to speak with Elrond or 2 to speak with Bilbo." << std::endl;
+
+        std::cin >> choice;
+        getValidChoice(choice, 1, 2);
+
+        if (choice == 1) {
+            std::cout << "Lord Elrond discusses the history of the Ring and the grave dangers ahead, strengthening your resolve.\n" << std::endl;
+        } else if (choice == 2) {
+            std::cout << "Bilbo shares stories of his own adventures and offers words of encouragement, along with his sword, Sting, and a mithril shirt.\n" << std::endl;
+        }
+
+        std::cout << "The Fellowship of the Ring is formed! Now, you must choose your path forward.\n" << std::endl;
+        std::cout << "Do you attempt to cross the treacherous Caradhras, or brave the dark Mines of Moria?" << std::endl;
+        std::cout << "Press 1 to go over Caradhras or 2 to go through Moria." << std::endl;
+
+        std::cin >> choice;
+        getValidChoice(choice, 1, 2);
+
+        if (choice == 1) {
+            std::cout << "You attempt to cross Caradhras, but the mountain's harsh weather forces you to turn back.\n" << std::endl;
+            std::cout << "You are forced to take the path through Moria.\n" << std::endl;
+        }
+
+        std::cout << "You enter the Mines of Moria. After a perilous journey, you encounter the Balrog.\n" << std::endl;
+        std::cout << "Gandalf faces the Balrog to protect the Fellowship. Do you stay and fight alongside him, or follow the others to escape?" << std::endl;
+        std::cout << "Press 1 to stay with Gandalf or 2 to follow the Fellowship." << std::endl;
+
+        std::cin >> choice;
+        getValidChoice(choice, 1, 2);
+
+        if (choice == 1) {
+            std::cout << "You bravely stand with Gandalf, but the Balrog's power is too great. Both you and Gandalf are overwhelmed.\nGame Over" << std::endl;
+        } else if (choice == 2) {
+            std::cout << "You follow the rest of the Fellowship, escaping Moria as Gandalf battles the Balrog.\n" << std::endl;
+            std::cout << "The Fellowship continues its journey, but soon reaches Amon Hen, where it is attacked by Uruk-hai.\n" << std::endl;
+            std::cout << "Do you try to escape alone with the Ring, or do you seek help from Aragorn?" << std::endl;
+            std::cout << "Press 1 to escape alone or 2 to seek Aragorn's help." << std::endl;
+
+            std::cin >> choice;
+            getValidChoice(choice, 1, 2);
+
+            if (choice == 1) {
+                std::cout << "You attempt to escape alone, but Boromir, trying to protect you, is slain. You and Samwise escape, continuing your journey to Mordor alone.\nGame Over" << std::endl;
+            } else if (choice == 2) {
+                std::cout << "You seek Aragorn's help, and together you fight valiantly, but the Fellowship is scattered, and the Ring is nearly lost.\nGame Over" << std::endl;
+            }
+        }
     } else if (choice == 2) {
         std::cout << "You have chosen to decline the quest to destroy the ring and save Middle-earth." << std::endl;
         std::cout << "The Shire burns to the ground and everything you once loved is lost.\nGame Over" << std::endl;
@@ -460,7 +610,29 @@ void playAragorn() {
 
     if (choice == 1) {
         std::cout << "You accept your destiny and set out to gather allies to fight against Sauron's forces.\n" << std::endl;
-        std::cout << "Do you first go to Rohan to aid King Théoden or seek the Army of the Dead?" << std::endl;
+        std::cout << "Before gathering allies, do you seek counsel in Rivendell or immediately go to Rohan/Army of the Dead?" << std::endl;
+        std::cout << "Press 1 to go to Rivendell or 2 to proceed directly to gathering allies." << std::endl;
+
+        std::cin >> choice;
+        getValidChoice(choice, 1, 2);
+
+        if (choice == 1) {
+            std::cout << "You travel to Rivendell, the Last Homely House East of the Sea.\n" << std::endl;
+            std::cout << "Do you seek the wisdom of Lord Elrond or the guidance of Arwen Undómiel?" << std::endl;
+            std::cout << "Press 1 to consult Elrond or 2 to speak with Arwen." << std::endl;
+
+            std::cin >> choice;
+            getValidChoice(choice, 1, 2);
+
+            if (choice == 1) {
+                std::cout << "Lord Elrond shares ancient lore and advises you on the strength of your lineage.\nHe reinforces your resolve to claim your birthright.\n" << std::endl;
+            } else if (choice == 2) {
+                std::cout << "Arwen reaffirms her love and faith in you, presenting you with the Evenstar pendant.\nHer unwavering belief strengthens your spirit for the trials ahead.\n" << std::endl;
+            }
+            std::cout << "With renewed purpose, you prepare to gather allies.\n" << std::endl;
+        }
+
+        std::cout << "Now, do you first go to Rohan to aid King Théoden or seek the Army of the Dead?" << std::endl;
         std::cout << "Press 1 to go to Rohan or 2 to seek the Army of the Dead." << std::endl;
 
         std::cin >> choice;
@@ -469,21 +641,24 @@ void playAragorn() {
         if (choice == 1) {
             std::cout << "You ride to Rohan and help free King Théoden from Saruman's influence.\n" << std::endl;
             std::cout << "Together, you prepare to defend Helm's Deep against the approaching army.\n" << std::endl;
-            std::cout << "Do you lead a charge against the enemy or hold the fortress?" << std::endl;
-            std::cout << "Press 1 to lead a charge or 2 to hold the fortress." << std::endl;
+            std::cout << "The Uruk-hai army is at the gates. How do you lead the defense?" << std::endl;
+            std::cout << "Press 1 to lead a charge from the gate, 2 to defend the walls, or 3 to prepare an ambush." << std::endl;
 
             std::cin >> choice;
-            getValidChoice(choice, 1, 2);
+            getValidChoice(choice, 1, 3);
 
             if (choice == 1) {
-                std::cout << "Your bold charge inspires the men, and with the arrival of Gandalf, you turn the tide of battle.\nVictory is yours!\nGame Over" << std::endl;
+                std::cout << "Your bold charge from the gate inspires the men, and with the arrival of Gandalf and Erkenbrand, you turn the tide of battle.\nVictory is yours!\nGame Over" << std::endl;
             } else if (choice == 2) {
-                std::cout << "The fortress holds for a time, but the enemy breaches the walls.\nDespite your efforts, Helm's Deep falls.\nGame Over" << std::endl;
+                std::cout << "You rally the defenders on the walls, holding back the enemy with fierce determination.\nThough the battle is long and hard, the dawn brings Gandalf and the Rohirrim, securing your victory.\nGame Over" << std::endl;
+            } else if (choice == 3) {
+                std::cout << "You devise a clever ambush, luring a portion of the Uruk-hai into a trap before unleashing your forces.\nThis tactical brilliance, combined with Gandalf's arrival, shatters the enemy's morale and secures a decisive victory.\nGame Over" << std::endl;
             }
         } else if (choice == 2) {
             std::cout << "You journey through the Paths of the Dead to enlist the help of the cursed army.\n" << std::endl;
-            std::cout << "Do you confront the King of the Dead with courage or attempt to bargain?" << std::endl;
-            std::cout << "Press 1 to confront with courage or 2 to bargain." << std::endl;
+            std::cout << "Upon reaching the Stone of Erech, you confront the King of the Dead.\n" << std::endl;
+            std::cout << "Do you confront the King of the Dead with courage and demand their oath, or attempt to purify their spirits?" << std::endl;
+            std::cout << "Press 1 to confront with courage or 2 to attempt purification." << std::endl;
 
             std::cin >> choice;
             getValidChoice(choice, 1, 2);
@@ -491,7 +666,7 @@ void playAragorn() {
             if (choice == 1) {
                 std::cout << "Your bravery convinces the Army of the Dead to fulfill their oath.\nWith their help, you secure victory at the Battle of Pelennor Fields.\nGame Over" << std::endl;
             } else if (choice == 2) {
-                std::cout << "The King of the Dead sees your bargaining as weakness and refuses to help.\nWithout their aid, you cannot turn the tide of war.\nGame Over" << std::endl;
+                std::cout << "You attempt to purify their tormented spirits, but the task is beyond your current power.\nThey remain bound by their curse, unable to aid you, and you must face the war without them.\nGame Over" << std::endl;
             }
         }
     } else if (choice == 2) {
@@ -505,6 +680,31 @@ void playLegolas() {
     int choice;
 
     std::cout << "As Legolas, Prince of the Woodland Realm, you join the Fellowship to destroy the One Ring.\n" << std::endl;
+    std::cout << "Before embarking on your journey, do you seek Elven wisdom in Lothlórien or train with Gimli to hone your combat skills?" << std::endl;
+    std::cout << "Press 1 to go to Lothlórien or 2 to train with Gimli." << std::endl;
+
+    std::cin >> choice;
+    getValidChoice(choice, 1, 2);
+
+    if (choice == 1) {
+        std::cout << "You travel to Lothlórien, the heart of Elvendom on Middle-earth.\n" << std::endl;
+        std::cout << "Lady Galadriel offers you a glimpse into the future. Do you accept her vision?" << std::endl;
+        std::cout << "Press 1 to accept the vision or 2 to decline." << std::endl;
+
+        std::cin >> choice;
+        getValidChoice(choice, 1, 2);
+
+        if (choice == 1) {
+            std::cout << "You witness the potential darkness that lies ahead, strengthening your resolve to fight for Middle-earth.\n" << std::endl;
+        } else if (choice == 2) {
+            std::cout << "You choose to face the future without foreknowledge, relying on your own strength and the bonds of the Fellowship.\n" << std::endl;
+        }
+        std::cout << "With renewed spirit, you continue your journey.\n" << std::endl;
+    } else if (choice == 2) {
+        std::cout << "You spend time training with Gimli, learning to fight alongside a Dwarf and improving your close-quarters combat skills.\n" << std::endl;
+        std::cout << "Your bond with Gimli strengthens, and you become a more versatile warrior.\n" << std::endl;
+    }
+
     std::cout << "During your journey, you can focus on aiding your companions or scouting ahead for dangers.\n" << std::endl;
     std::cout << "Press 1 to aid your companions or 2 to scout ahead." << std::endl;
 
@@ -514,22 +714,78 @@ void playLegolas() {
     if (choice == 1) {
         std::cout << "You stay close to your companions, providing support with your keen archery skills.\n" << std::endl;
         std::cout << "In the Battle of Helm's Deep, your actions are crucial in holding the fortress.\n" << std::endl;
-        std::cout << "Game Over" << std::endl;
+        std::cout << "Do you focus on eliminating key Uruk-hai leaders or protecting the vulnerable civilians?" << std::endl;
+        std::cout << "Press 1 to target leaders or 2 to protect civilians." << std::endl;
+
+        std::cin >> choice;
+        getValidChoice(choice, 1, 2);
+
+        if (choice == 1) {
+            std::cout << "Your precise shots fell many Uruk-hai leaders, demoralizing their forces and turning the tide of battle.\nGame Over" << std::endl;
+        } else if (choice == 2) {
+            std::cout << "You bravely defend the civilians, ensuring their safety amidst the chaos of battle.\nYour compassion inspires hope in the darkest hour.\nGame Over" << std::endl;
+        }
     } else if (choice == 2) {
         std::cout << "While scouting ahead, you discover a massive Uruk-hai army approaching.\n" << std::endl;
-        std::cout << "Do you return to warn your companions or attempt to hinder the enemy?" << std::endl;
+        std::cout << "Do you return to warn your companions or attempt to hinder the enemy with a daring ambush?" << std::endl;
         std::cout << "Press 1 to return and warn or 2 to hinder the enemy." << std::endl;
 
         std::cin >> choice;
         getValidChoice(choice, 1, 2);
 
         if (choice == 1) {
-            std::cout << "Your warning allows the Fellowship to prepare for the attack.\n" << std::endl;
-            std::cout << "Your actions contribute to the survival of your companions.\nGame Over" << std::endl;
+            std::cout << "Your timely warning allows the Fellowship to prepare for the attack, setting up defenses and ambushes.\n" << std::endl;
+            std::cout << "Your actions contribute significantly to the survival of your companions.\nGame Over" << std::endl;
         } else if (choice == 2) {
-            std::cout << "Despite your skill, you are overwhelmed by the enemy.\n" << std::endl;
-            std::cout << "Your sacrifice delays them but costs you your life.\nGame Over" << std::endl;
+            std::cout << "You set a cunning trap, delaying the Uruk-hai army and allowing your companions more time to escape or prepare.\nHowever, you are gravely wounded in the process.\nGame Over" << std::endl;
         }
+    }
+
+    std::cout << "Later, you find yourself on the Pelennor Fields, facing the full might of Mordor.\n" << std::endl;
+    std::cout << "Do you join the charge of the Rohirrim or seek out the Mûmakil to bring them down?" << std::endl;
+    std::cout << "Press 1 to join the Rohirrim charge or 2 to hunt Mûmakil." << std::endl;
+
+    std::cin >> choice;
+    getValidChoice(choice, 1, 2);
+
+    if (choice == 1) {
+        std::cout << "You ride alongside the Rohirrim, your arrows finding their marks amidst the enemy ranks.\nYour skill and bravery help break the siege of Minas Tirith.\nGame Over" << std::endl;
+    } else if (choice == 2) {
+        std::cout << "You bravely take on the colossal Mûmakil, bringing down several of the beasts with your precise archery.\nYour actions sow chaos among the enemy and save many lives.\nGame Over" << std::endl;
+    }
+}
+
+// Function to handle Samwise's storyline
+void playSamwise() {
+    displayAsciiArt(SAMWISE_ASCII);
+    int choice;
+
+    std::cout << "As Samwise Gamgee, your loyalty to Mr. Frodo is unwavering. You embark on the perilous journey to Mordor, determined to see him through to the end.\n" << std::endl;
+    std::cout << "Frodo is weary and the path is hard. Do you offer words of encouragement or share your meager rations?" << std::endl;
+    std::cout << "Press 1 to offer encouragement or 2 to share rations." << std::endl;
+
+    std::cin >> choice;
+    getValidChoice(choice, 1, 2);
+
+    if (choice == 1) {
+        std::cout << "Your heartfelt words lift Frodo's spirits, giving him the strength to continue.\n" << std::endl;
+    } else if (choice == 2) {
+        std::cout << "You share your precious food, ensuring Frodo has the energy to keep going, even if it means you go without.\n" << std::endl;
+    }
+
+    std::cout << "You encounter a difficult obstacle: a steep, rocky climb. Frodo is struggling.\n" << std::endl;
+    std::cout << "Do you carry the Ring for a short while to ease Frodo's burden, or do you help him physically up the climb?" << std::endl;
+    std::cout << "Press 1 to carry the Ring or 2 to help him climb." << std::endl;
+
+    std::cin >> choice;
+    getValidChoice(choice, 1, 2);
+
+    if (choice == 1) {
+        std::cout << "You bravely take the Ring, feeling its immense weight and temptation, but your loyalty to Frodo allows you to resist its power.\n" << std::endl;
+        std::cout << "Game Over" << std::endl;
+    } else if (choice == 2) {
+        std::cout << "You put your own strength aside and help Frodo, pushing him up the difficult terrain. Your dedication is truly inspiring.\n" << std::endl;
+        std::cout << "Game Over" << std::endl;
     }
 }
 
